@@ -1,5 +1,6 @@
 //Random Aleatorio = new Random();//Por si acaso ;)
  class Cubo{
+   PVector position;
   float posLargo;//Sirven para crear varios objetos Cubo.
   float posAlto;
   float size; 
@@ -8,21 +9,22 @@
   float vel=5; //Valor de base del movimiento;
   String velDirection; //Direccion que llevaba el objeto en el ultimo loop. Se explica su uso en detalle en los comentarios de la funcion Movimiento()
   
-  float ancho; //Necesarios para hacer ciertas cosas, toman los valores de la pantalla de juego.
-  float alto;
+   float ancho; //Necesarios para hacer ciertas cosas, toman los valores de la pantalla de juego.
+   float alto;
 
   float transparencia; //Indice de cambio de transparencia, usado para generar defecto de respiracion ene el color del objeto.
   boolean blkToWht; //Necesario para saber la direcion que se toma durante el proceso de respiracion //TODO: Encontrar una mejor manera de hacerlo.
   
-  Cubo(float anchoPantalla, float altoPantalla, float tamanyo){
-    
+  Cubo(float anchoPantalla, float altoPantalla, float tamanyo, float posLargo,float posAncho){
+
     ancho = anchoPantalla;
+
     alto = altoPantalla;
     
     velDirection="North"; //Direccion default, sirve para inicializar la variable.
-    
-    posLargo = (anchoPantalla/2)-tamanyo/2; //Posicion inical del objeto TODO: Cambiarlo a una mejor.
-    posAlto = (altoPantalla/2)-tamanyo/2;
+    position = new PVector (posLargo, posAncho);
+    //this.posLargo = posLargo; //Posicion inical del objeto TODO: Cambiarlo a una mejor.
+    //this.posAlto = posAncho;
     
     size = tamanyo; //Usado para crear varios objetos player sin necesidad de modificar los valores tipo: Objeto.size=xx;
     
@@ -119,10 +121,13 @@
              velDirection="South"; 
              vel=5;
             }
+
           if (posAlto < (alto-size)){
+
             posAlto+=vel;
             //print(vel+ " ");//Para debugging
           }else{
+
             posAlto=alto-size;
            }
           break;
