@@ -2,6 +2,10 @@
  class Cubo{
    PVector position;
    PVector velocity;
+   PVector direction;
+
+   int Disparos;
+   
    float size; 
   
    boolean arriba,abajo,izda,drcha;
@@ -13,12 +17,12 @@
   boolean blkToWht; //Necesario para saber la direcion que se toma durante el proceso de respiracion //TODO: Encontrar una mejor manera de hacerlo.
   
   Cubo(float anchoPantalla, float altoPantalla, float tamanyo, float posLargo,float posAncho){
-
+    
     ancho = anchoPantalla;
-
     alto = altoPantalla;
     
-   
+    Disparos = 0;
+    
     position = new PVector (posLargo, posAncho);
     //this.posLargo = posLargo; //Posicion inical del objeto TODO: Cambiarlo a una mejor.
     //this.posAlto = posAncho;
@@ -71,6 +75,14 @@
     position.x = constrain(position.x + velocity.x*(int(izda) - int(drcha)), 0, width - size);
     position.y = constrain(position.y + velocity.y*(int(abajo) -int(arriba)), 0, height - size);
   }
+  void shoot(){
+    Disparos++;
+    
+  }
+  
+  void setShoot(boolean presion){
+    
+  }
   
   boolean setMove(int tecla, boolean presion){ //Se usa un int para representar un char debido a que "w" y "W" tienen
     switch(tecla){                             //el mismo KeyCode
@@ -86,4 +98,7 @@
       return presion;
   }
   }
+
+
+  
  }
