@@ -1,11 +1,9 @@
 //Random Aleatorio = new Random();//Por si acaso ;)
  class Cubo{
    PVector position;
-   PVector velocity;
-   PVector direction;
+   PVector velocidad;
 
-
-   boolean isDead;
+   boolean estadoVida;
    
    float size; 
   
@@ -18,7 +16,7 @@
   boolean blkToWht; //Necesario para saber la direcion que se toma durante el proceso de respiracion //TODO: Encontrar una mejor manera de hacerlo.
   
   Cubo(float anchoPantalla, float altoPantalla, float tamanyo, float posLargo,float posAncho){
-    isDead = false;
+    estadoVida = false;
     ancho = anchoPantalla;
     alto = altoPantalla;
 
@@ -27,7 +25,7 @@
     //this.posLargo = posLargo; //Posicion inical del objeto TODO: Cambiarlo a una mejor.
     //this.posAlto = posAncho;
     
-    velocity = new PVector(5,5);
+    velocidad = new PVector(5,5);
     size = tamanyo; //Usado para crear varios objetos player sin necesidad de modificar los valores tipo: Objeto.size=xx;
     
     transparencia = 255; //Transparencia default -> Empieza en blanco.
@@ -60,7 +58,7 @@
 }
   
   void Dibujar(){
-    if (!isDead){
+    if (!estadoVida){
       noStroke();
       fill(0, 153, 255);//(51, 204, 255);
       rect(position.x,position.y,size,size);
@@ -68,29 +66,38 @@
       rect(position.x,position.y,size,size);
     }  
 }
-  void move(){ 
+  void Mover(){ 
     /*
     Constrain significa que el parametro se modifica pero siempre que esté entre unos valores. 
     Esta modificacion consiste en añadirle la velocidad a cada componente del vector posicion segun si 
     va a derecha o a izquierda. Hacemos una refundicion de los booleans a int para que si false == 0 y si 
     true == 1, asi podemos controlar la direccion de movimiento.
     */
-    position.x = constrain(position.x + velocity.x*(int(izda) - int(drcha)), 0, width - size);
-    position.y = constrain(position.y + velocity.y*(int(abajo) -int(arriba)), 0, height - size);
+    position.x = constrain(position.x + velocidad.x*(int(izda) - int(drcha))+(dificultad * (int(izda) - int(drcha))), 0, width - size);
+    position.y = constrain(position.y + velocidad.y*(int(abajo) -int(arriba)) + (dificultad *(int(abajo) -int(arriba))), 0, height - size);
     
-    for(Enemy e: enemies){
-      if(abs(position.x - e.loc.x) < size / 2 + e.size / 2 && abs(position.y - e.loc.y) < size / 2 + e.size / 2){
-        isDead = true;
+/*   for(Enemigo e: enemigos){
+      if(abs(position.x - e.loc.x) < (size  + e.size) && abs(position.y - e.loc.y)+15 < size / 2 + e.size / 2){
+        estadoVida = true;
         e.isDead = true;
         break;
       }
+    }*/
+    
+    for (Enemigo e: enemigos){
+      if((e.loc.x+e.size>position.x && e.loc.x < position.x+size) && (e.loc.y + e.size > position.y && e.loc.y < position.y+size)){
+        estadoVida = true;
+        e.isDead = true;
+        break;
+      }
+      
     }
 
 }
   
 
   
-  boolean setMove(int tecla, boolean presion){ //Se usa un int para representar un char debido a que "w" y "W" tienen
+  boolean setMover(int tecla, boolean presion){ //Se usa un int para representar un char debido a que "w" y "W" tienen
     switch(tecla){                             //el mismo KeyCode
     case 'W':
       return arriba = presion;
